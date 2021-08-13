@@ -8,6 +8,7 @@ const pool = new Pool({
   database: 'postgres',
   password: myPassword,
   port: 5432,
+  idleTimeoutMillis: 60000
 });
 
 // GET all products
@@ -17,7 +18,7 @@ const getProducts = (req, res) => {
     if (err) {
       throw err;
     }
-    res.status(200).json(results.rows[0]);
+    res.status(200).json(results.rows);
   });
 };
 
@@ -25,13 +26,14 @@ const getProducts = (req, res) => {
 // GET /products/:product_id
 const getProductInfo = (req, res) => {
   var productInfo = {};
-  pool.query('SELECT * FROM product WHERE id = 1', (err, results) => {
+  var productId = Object.values(req.params)[0] || 1;
+  pool.query(`SELECT * FROM product WHERE id = ${productId}`, (err, results) => {
     if (err) {
       throw err;
     }
     productInfo = results.rows[0];
   });
-  pool.query('SELECT * FROM features WHERE product_id = 1', (err, results) => {
+  pool.query(`SELECT * FROM features WHERE product_id = ${productId}`, (err, results) => {
     if (err) {
       throw err;
     }
@@ -40,7 +42,7 @@ const getProductInfo = (req, res) => {
       delete row.product_id;
     });
     productInfo.features = results.rows;
-    console.log(productInfo);
+    // console.log(productInfo);
     res.status(200).json(productInfo);
   });
 };
@@ -48,10 +50,10 @@ const getProductInfo = (req, res) => {
 // GET product style for specific product
 // GET /products/:product_id/styles
 const getStyles = (req, res) => {
-  const currentProductId = 1;
+  var productId = Object.values(req.params)[0] || 1;
   var styles = {};
-  var productStyles = { product_id: currentProductId, results: [] };
-  pool.query(`SELECT * FROM styles WHERE productId = ${currentProductId}`, (err, results) => {
+  var productStyles = { product_id: productId, results: [] };
+  pool.query(`SELECT * FROM styles WHERE productId = ${productId}`, (err, results) => {
     if (err) {
       throw err;
     }
@@ -59,6 +61,7 @@ const getStyles = (req, res) => {
 
     var recurse = (styles) => {
       if (!styles.length) {
+        console.log('getStyles request complete');
         res.status(200).json(productStyles);
         return;
       }
@@ -68,7 +71,7 @@ const getStyles = (req, res) => {
       oneStyle.name = style.name;
       if (style.sale_price === null) { style.sale_price = 0; }
       oneStyle.sale_price = style.sale_price;
-      style['default?'] === currentProductId ? style['default?'] = true : style['default?'] = false;
+      style['default?'] === productId ? style['default?'] = true : style['default?'] = false;
       oneStyle['default?'] = style['default?'];
       getPhotos(style.id)
         .then((photoRes) => {
@@ -86,21 +89,6 @@ const getStyles = (req, res) => {
   });
 };
 
-// styles.forEach(style => {
-//   var oneStyle = { style_id: 0, name: '', original_price: '', sale_price: '0', 'default?': false, photos: [], skus: {} };
-//   oneStyle.style_id = style.id;
-//   oneStyle.name = style.name;
-//   if (style.sale_price === null) { style.sale_price = 0; }
-//   oneStyle.sale_price = style.sale_price;
-//   style['default?'] === currentProductId ? style['default?'] = true : style['default?'] = false;
-//   oneStyle['default?'] = style['default?'];
-//   getPhotos(style.id)
-//     .then((res) => {
-//       oneStyle.photos = res;
-//     });
-//   productStyles.results.push(oneStyle);
-// });
-
 // GET photos for current style id
 const getPhotos = (styleId) => {
   var photos;
@@ -113,7 +101,7 @@ const getPhotos = (styleId) => {
         delete photo.styleid;
       });
 
-      console.log(photos);
+      // console.log(photos);
       return photos;
     });
 };
@@ -133,22 +121,21 @@ const getSkus = (styleId) => {
         };
       });
 
-      console.log(response);
+      // console.log(response);
       return response;
     });
 };
 
 // GET all related ids for specific product
 const getRelated = (req, res) => {
-  pool.query('SELECT * FROM related WHERE current_product_id = 1', (err, results) => {
+  var productId = Object.values(req.params)[0] || 1;
+  pool.query(`SELECT * FROM related WHERE current_product_id = ${productId}`, (err, results) => {
     if (err) {
       throw err;
     }
     res.status(200).json([results.rows[0].related_product_id]);
   });
 };
-
-
 
 module.exports = {
   getProducts,
