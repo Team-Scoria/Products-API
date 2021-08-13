@@ -26,7 +26,7 @@ const getProducts = (req, res) => {
 // GET /products/:product_id
 const getProductInfo = (req, res) => {
   var productInfo = {};
-  var productId = Object.values(req.params)[0] || 1;
+  var productId = req.params.product_id || 1;
   pool.query(`SELECT * FROM product WHERE id = ${productId}`, (err, results) => {
     if (err) {
       throw err;
@@ -50,7 +50,7 @@ const getProductInfo = (req, res) => {
 // GET product style for specific product
 // GET /products/:product_id/styles
 const getStyles = (req, res) => {
-  var productId = Object.values(req.params)[0] || 1;
+  var productId = req.params.product_id || 1;
   var styles = {};
   var productStyles = { product_id: productId, results: [] };
   pool.query(`SELECT * FROM styles WHERE productId = ${productId}`, (err, results) => {
@@ -128,7 +128,7 @@ const getSkus = (styleId) => {
 
 // GET all related ids for specific product
 const getRelated = (req, res) => {
-  var productId = Object.values(req.params)[0] || 1;
+  var productId = req.params.product_id || 1;
   pool.query(`SELECT * FROM related WHERE current_product_id = ${productId}`, (err, results) => {
     if (err) {
       throw err;

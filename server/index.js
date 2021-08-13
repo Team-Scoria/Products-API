@@ -8,8 +8,6 @@ const db = require('./queries.js');
 
 app.use(bodyParser.json());
 
-var productId = 1;
-
 app.get('/', (req, res) => {
   res.send('Success!');
 });
@@ -20,11 +18,11 @@ app.get('/loaderio-45c89ab07b8e3d10340bae02ffc186e4', (req, res) => {
 
 app.get('/products', db.getProducts);
 // Response time: Maximum response size reached
-app.get('/products/:' + productId, db.getProductInfo);
+app.get('/products/:product_id', db.getProductInfo);
 // Response time: 92ms
-app.get('/products/:' + productId + '/related', db.getRelated);
+app.get('/products/:product_id/related', db.getRelated);
 // Response time: 701ms
-app.get('/products/:' + productId + '/styles', db.getStyles);
+app.get('/products/:product_id/styles', db.getStyles);
 // Response time: 38.11s
 
 
