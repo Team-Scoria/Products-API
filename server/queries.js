@@ -13,15 +13,29 @@ const pool = new Pool({
 
 // GET /products
 const getProducts = (req, res) => {
-  pool.query('SELECT * FROM product', (err, results) => {
+  const productQuery = `
+    SELECT array_agg(
+      json_build_object(
+      'id', id,
+      'name', name,
+      'slogan', slogan,
+      'description', description,
+      'category', category,
+      'default_price', default_price
+      )
+    )
+    FROM product
+  `;
+
+  pool.query(productQuery, (err, results) => {
     if (err) { throw err; }
-    res.status(200).json(results.rows);
+    res.status(200).send(results.rows[0].array_agg);
   });
 };
 
 // GET /products/:product_id
 const getProductInfo = (req, res) => {
-  var productId = req.params.product_id || 1;
+  var productId = req.params.product_id;
   const productQuery = `
     SELECT json_build_object(
       'id', product.id,
@@ -37,11 +51,11 @@ const getProductInfo = (req, res) => {
     FROM product
     INNER JOIN features
     ON product.id = features.product_id
-    WHERE product.id = ${productId}
+    WHERE product.id = $1
     GROUP BY product.id
   `;
 
-  pool.query(productQuery, (err, results) => {
+  pool.query(productQuery, [productId], (err, results) => {
     if (err) { throw err; }
     res.status(200).send(results.rows[0].info);
   });
@@ -49,57 +63,62 @@ const getProductInfo = (req, res) => {
 
 // GET /products/:product_id/styles
 const getStyles = (req, res) => {
-  var productId = req.params.product_id || 1;
+  var productId = req.params.product_id;
   const stylesQuery = `
-    SELECT json_build_object(
-      'product_id', ${productId},
-      'results', array_agg(
-        json_build_object(
-          'style_id', styles.id,
-          'name', styles.name,
-          'original_price', styles.original_price,
-          'sale_price', styles.sale_price,
-          'default?', styles.default_style,
-          'photos', array(
-            SELECT json_build_object(
-              'thumbnail_url', photos.thumbnail_url,
-              'url', photos.url
-            )
-          )
-        )
+    SELECT styles.id as style_id, name, original_price, sale_price, default_style as "default?",
+    array_agg(
+      DISTINCT jsonb_build_object(
+        'thumbnail_url', photos.thumbnail_url,
+        'url', photos.url
       )
-    ) AS styles
+    ) as photos,
+    json_object_agg(
+      skus.id, json_build_object(
+        'quantity', quantity,
+        'size', size
+      )
+    ) as skus
     FROM styles
-    INNER JOIN photos
-    ON styles.id = photos.styleid
-    WHERE styles.productid = ${productId}
+    LEFT JOIN photos ON styles.id = photos.styleId
+    LEFT JOIN skus ON styles.id = skus.styleId
+    WHERE styles.productid = $1
     GROUP BY styles.id
   `;
 
-  /**
-   * 'skus', json_build_object(
-            skus.id, json_build_object(
-              'quantity', skus.quantity,
-              'size', skus.size
-            )
-          )
-
-              INNER JOIN skus
-    ON styles.id = skus.styleid
-   */
-
-  pool.query(stylesQuery, (err, results) => {
+  pool.query(stylesQuery, [productId], (err, results) => {
     if (err) { throw err; }
-    res.status(200).send(results.rows[0].styles);
+
+    results.rows.forEach(row => {
+      if (row['default?'] === 0) {
+        row['default?'] = false;
+      } else {
+        row['default?'] = true;
+      }
+    });
+
+    var output = {
+      'product_id': productId,
+      'results': results.rows
+    };
+
+    res.status(200).send(output);
   });
 };
 
 // GET all related ids for specific product
 const getRelated = (req, res) => {
   var productId = req.params.product_id || 1;
-  pool.query(`SELECT * FROM related WHERE current_product_id = ${productId}`, (err, results) => {
+  const relatedQuery = `
+    SELECT array_agg(
+      related.related_product_id
+    ) AS relatedarr
+    FROM related
+    WHERE current_product_id = $1
+  `;
+
+  pool.query(relatedQuery, [productId], (err, results) => {
     if (err) { throw err; }
-    res.status(200).json([results.rows[0].related_product_id]);
+    res.status(200).json(results.rows[0].relatedarr);
   });
 };
 

@@ -19,11 +19,14 @@ app.get('/loaderio-45c89ab07b8e3d10340bae02ffc186e4', (req, res) => {
 app.get('/products', db.getProducts);
 // Response time: Maximum response size reached
 app.get('/products/:product_id', db.getProductInfo);
-// Response time: 92ms
+// JS Response time: 92ms
+// Query Response time: 70ms
 app.get('/products/:product_id/related', db.getRelated);
 // Response time: 701ms
+// Query Response time: 100ms
 app.get('/products/:product_id/styles', db.getStyles);
 // Response time: 38.11s
+// Query Response time: 8.5s
 
 app.listen(port, () => {
   console.log('Listening at http://localhost:' + port);
