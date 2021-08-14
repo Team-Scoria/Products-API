@@ -16,21 +16,27 @@ const getProducts = (req, res) => {
   const productQuery = `
     SELECT array_agg(
       json_build_object(
-      'id', id,
-      'name', name,
-      'slogan', slogan,
-      'description', description,
-      'category', category,
-      'default_price', default_price
+        'id', product.id,
+        'name', product.name,
+        'slogan', product.slogan,
+        'description', product.description,
+        'category', product.category,
+        'default_price', CAST(product.default_price AS varchar)
       )
     )
     FROM product
+    WHERE id < 1000
   `;
 
   pool.query(productQuery, (err, results) => {
     if (err) { throw err; }
-    res.status(200).send(results.rows[0].array_agg);
+    res.status(200).send(results.rows);
   });
+
+  // pool.query('SELECT * FROM product LIMIT 10000', (err, results) => {
+  //   if (err) { throw err; }
+  //   res.status(200).send(results.rows);
+  // });
 };
 
 // GET /products/:product_id
@@ -65,7 +71,8 @@ const getProductInfo = (req, res) => {
 const getStyles = (req, res) => {
   var productId = req.params.product_id;
   const stylesQuery = `
-    SELECT styles.id as style_id, name, original_price, sale_price, default_style as "default?",
+    SELECT styles.id as style_id, name, original_price, sale_price,
+    CASE default_style WHEN 1 THEN true ELSE false END "default?",
     array_agg(
       DISTINCT jsonb_build_object(
         'thumbnail_url', photos.thumbnail_url,
@@ -88,13 +95,13 @@ const getStyles = (req, res) => {
   pool.query(stylesQuery, [productId], (err, results) => {
     if (err) { throw err; }
 
-    results.rows.forEach(row => {
-      if (row['default?'] === 0) {
-        row['default?'] = false;
-      } else {
-        row['default?'] = true;
-      }
-    });
+    // results.rows.forEach(row => {
+    //   if (row['default?'] === 0) {
+    //     row['default?'] = false;
+    //   } else {
+    //     row['default?'] = true;
+    //   }
+    // });
 
     var output = {
       'product_id': productId,

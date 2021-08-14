@@ -26,7 +26,8 @@ app.get('/products/:product_id/related', db.getRelated);
 // Query Response time: 100ms
 app.get('/products/:product_id/styles', db.getStyles);
 // Response time: 38.11s
-// Query Response time: 8.5s
+// Query Response time before index: 8s
+// Query Response time after index: 50ms
 
 app.listen(port, () => {
   console.log('Listening at http://localhost:' + port);
