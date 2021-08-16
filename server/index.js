@@ -16,7 +16,7 @@ app.get('/loaderio-45c89ab07b8e3d10340bae02ffc186e4', (req, res) => {
   res.send('./loaderio-89365e86046e9af01accf031f7daa29a.txt');
 });
 
-app.get('/products', db.getProducts);
+app.get('/products/:page/:count', db.getProducts);
 // Response time: Maximum response size reached
 app.get('/products/:product_id', db.getProductInfo);
 // JS Response time: 92ms

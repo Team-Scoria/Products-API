@@ -13,6 +13,11 @@ const pool = new Pool({
 
 // GET /products
 const getProducts = (req, res) => {
+  var page = parseInt(req.params.page) || 1;
+  var count = parseInt(req.params.count) || 5;
+  var endingId = page * count;
+  var startingId = endingId - count + 1;
+  console.log(startingId, endingId);
   const productQuery = `
     SELECT array_agg(
       json_build_object(
@@ -25,7 +30,7 @@ const getProducts = (req, res) => {
       )
     )
     FROM product
-    WHERE id < 1000
+    WHERE id BETWEEN ${startingId} AND ${endingId}
   `;
 
   pool.query(productQuery, (err, results) => {
