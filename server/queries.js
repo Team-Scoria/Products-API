@@ -37,11 +37,6 @@ const getProducts = (req, res) => {
     if (err) { throw err; }
     res.status(200).send(results.rows);
   });
-
-  // pool.query('SELECT * FROM product LIMIT 10000', (err, results) => {
-  //   if (err) { throw err; }
-  //   res.status(200).send(results.rows);
-  // });
 };
 
 // GET /products/:product_id
@@ -100,14 +95,6 @@ const getStyles = (req, res) => {
   pool.query(stylesQuery, [productId], (err, results) => {
     if (err) { throw err; }
 
-    // results.rows.forEach(row => {
-    //   if (row['default?'] === 0) {
-    //     row['default?'] = false;
-    //   } else {
-    //     row['default?'] = true;
-    //   }
-    // });
-
     var output = {
       'product_id': productId,
       'results': results.rows
@@ -119,7 +106,7 @@ const getStyles = (req, res) => {
 
 // GET all related ids for specific product
 const getRelated = (req, res) => {
-  var productId = req.params.product_id || 1;
+  var productId = req.params.product_id;
   const relatedQuery = `
     SELECT array_agg(
       related.related_product_id
