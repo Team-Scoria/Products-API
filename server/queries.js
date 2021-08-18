@@ -4,7 +4,7 @@ const { myPassword } = require('../password.js');
 const Pool = require('pg').Pool;
 const pool = new Pool({
   user: 'seijimatsumoto',
-  host: 'localhost',
+  host: 'ec2-3-92-187-204.compute-1.amazonaws.com',
   database: 'postgres',
   password: myPassword,
   port: 5432,
