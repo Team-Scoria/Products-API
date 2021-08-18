@@ -142,3 +142,9 @@ copy photos(id,styleId,url,thumbnail_url)
 from '/Users/seijimatsumoto/Documents/Hack Reactor/RFE4/SDC/Products-API/data/photos.csv'
 DELIMITER ','
 CSV HEADER;
+
+CREATE INDEX product_id_index ON product (id);
+CREATE INDEX features_product_id_index ON features (product_id);
+CREATE INDEX photos_styleid_index ON photos (styleid);
+CREATE INDEX skus_styleid_index ON skus (styleid);
+CREATE INDEX current_product_id_index ON related (current_product_id);
