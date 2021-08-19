@@ -10,16 +10,16 @@
 --
 -- ---
 
-DROP TABLE IF EXISTS `Product`;
+DROP TABLE IF EXISTS 'Product';
 
-CREATE TABLE `Product` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `name` VARCHAR NULL DEFAULT NULL,
-  `slogan` VARCHAR NULL DEFAULT NULL,
-  `description` VARCHAR NULL DEFAULT NULL,
-  `category` VARCHAR NULL DEFAULT NULL,
-  `default_price` VARCHAR NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE 'Product' (
+  'id' INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  'name' VARCHAR NULL DEFAULT NULL,
+  'slogan' VARCHAR NULL DEFAULT NULL,
+  'description' VARCHAR NULL DEFAULT NULL,
+  'category' VARCHAR NULL DEFAULT NULL,
+  'default_price' VARCHAR NULL DEFAULT NULL,
+  PRIMARY KEY ('id')
 );
 
 -- ---
@@ -27,14 +27,14 @@ CREATE TABLE `Product` (
 --
 -- ---
 
-DROP TABLE IF EXISTS `Features`;
+DROP TABLE IF EXISTS 'Features';
 
-CREATE TABLE `Features` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `product_id` INTEGER NULL DEFAULT NULL,
-  `feature` VARCHAR NULL DEFAULT NULL,
-  `value` VARCHAR NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE 'Features' (
+  'id' INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  'product_id' INTEGER NULL DEFAULT NULL,
+  'feature' VARCHAR NULL DEFAULT NULL,
+  'value' VARCHAR NULL DEFAULT NULL,
+  PRIMARY KEY ('id')
 );
 
 -- ---
@@ -42,14 +42,14 @@ CREATE TABLE `Features` (
 --
 -- ---
 
-DROP TABLE IF EXISTS `Photos`;
+DROP TABLE IF EXISTS 'Photos';
 
-CREATE TABLE `Photos` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `styleId` INTEGER NULL DEFAULT NULL,
-  `thumbnail_url` TEXT NULL DEFAULT NULL,
-  `url` TEXT NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE 'Photos' (
+  'id' INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  'styleId' INTEGER NULL DEFAULT NULL,
+  'thumbnail_url' TEXT NULL DEFAULT NULL,
+  'url' TEXT NULL DEFAULT NULL,
+  PRIMARY KEY ('id')
 );
 
 -- ---
@@ -57,14 +57,14 @@ CREATE TABLE `Photos` (
 --
 -- ---
 
-DROP TABLE IF EXISTS `SKUs`;
+DROP TABLE IF EXISTS 'SKUs';
 
-CREATE TABLE `SKUs` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `styleId` INTEGER NULL DEFAULT NULL,
-  `size` VARCHAR NULL DEFAULT NULL,
-  `quantity` INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE 'SKUs' (
+  'id' INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  'styleId' INTEGER NULL DEFAULT NULL,
+  'size' VARCHAR NULL DEFAULT NULL,
+  'quantity' INTEGER NULL DEFAULT NULL,
+  PRIMARY KEY ('id')
 );
 
 -- ---
@@ -72,16 +72,16 @@ CREATE TABLE `SKUs` (
 --
 -- ---
 
-DROP TABLE IF EXISTS `styles`;
+DROP TABLE IF EXISTS 'styles';
 
-CREATE TABLE `styles` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `productId` INTEGER NULL DEFAULT NULL,
-  `name` VARCHAR NULL DEFAULT NULL,
-  `sale_price` INTEGER NULL DEFAULT NULL,
-  `original_price` INTEGER NULL DEFAULT NULL,
-  `default_style` INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE 'styles' (
+  'id' INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  'productId' INTEGER NULL DEFAULT NULL,
+  'name' VARCHAR NULL DEFAULT NULL,
+  'sale_price' INTEGER NULL DEFAULT NULL,
+  'original_price' INTEGER NULL DEFAULT NULL,
+  'default_style' INTEGER NULL DEFAULT NULL,
+  PRIMARY KEY ('id')
 );
 
 -- ---
@@ -89,24 +89,24 @@ CREATE TABLE `styles` (
 --
 -- ---
 
-DROP TABLE IF EXISTS `related`;
+DROP TABLE IF EXISTS 'related';
 
-CREATE TABLE `related` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `current_product_id` INTEGER NULL DEFAULT NULL,
-  `related_product_id` INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE 'related' (
+  'id' INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  'current_product_id' INTEGER NULL DEFAULT NULL,
+  'related_product_id' INTEGER NULL DEFAULT NULL,
+  PRIMARY KEY ('id')
 );
 
 -- ---
 -- Foreign Keys
 -- ---
 
-ALTER TABLE `Features` ADD FOREIGN KEY (product_id) REFERENCES `Product` (`id`);
-ALTER TABLE `Photos` ADD FOREIGN KEY (styleId) REFERENCES `styles` (`id`);
-ALTER TABLE `SKUs` ADD FOREIGN KEY (styleId) REFERENCES `styles` (`id`);
-ALTER TABLE `styles` ADD FOREIGN KEY (productId) REFERENCES `Product` (`id`);
-ALTER TABLE `related` ADD FOREIGN KEY (current_product_id) REFERENCES `Product` (`id`);
+ALTER TABLE 'Features' ADD FOREIGN KEY (product_id) REFERENCES 'Product' ('id');
+ALTER TABLE 'Photos' ADD FOREIGN KEY (styleId) REFERENCES 'styles' ('id');
+ALTER TABLE 'SKUs' ADD FOREIGN KEY (styleId) REFERENCES 'styles' ('id');
+ALTER TABLE 'styles' ADD FOREIGN KEY (productId) REFERENCES 'Product' ('id');
+ALTER TABLE 'related' ADD FOREIGN KEY (current_product_id) REFERENCES 'Product' ('id');
 
 
 -- --
