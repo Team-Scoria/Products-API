@@ -18,7 +18,7 @@ CREATE TABLE Product (
   slogan VARCHAR NULL DEFAULT NULL,
   description VARCHAR NULL DEFAULT NULL,
   category VARCHAR NULL DEFAULT NULL,
-  default_price VARCHAR NULL DEFAULT NULL,
+  default_price VARCHAR NULL DEFAULT NULL
 );
 
 -- ---
@@ -32,7 +32,7 @@ CREATE TABLE Features (
   id SERIAL PRIMARY KEY,
   product_id INTEGER NULL DEFAULT NULL,
   feature VARCHAR NULL DEFAULT NULL,
-  value VARCHAR NULL DEFAULT NULL,
+  value VARCHAR NULL DEFAULT NULL
 );
 
 -- ---
@@ -46,7 +46,7 @@ CREATE TABLE Photos (
   id SERIAL PRIMARY KEY,
   styleId INTEGER NULL DEFAULT NULL,
   thumbnail_url TEXT NULL DEFAULT NULL,
-  url TEXT NULL DEFAULT NULL,
+  url TEXT NULL DEFAULT NULL
 );
 
 -- ---
@@ -60,7 +60,7 @@ CREATE TABLE SKUs (
   id SERIAL PRIMARY KEY,
   styleId INTEGER NULL DEFAULT NULL,
   size VARCHAR NULL DEFAULT NULL,
-  quantity INTEGER NULL DEFAULT NULL,
+  quantity INTEGER NULL DEFAULT NULL
 );
 
 -- ---
@@ -76,7 +76,7 @@ CREATE TABLE styles (
   name VARCHAR NULL DEFAULT NULL,
   sale_price INTEGER NULL DEFAULT NULL,
   original_price INTEGER NULL DEFAULT NULL,
-  default_style INTEGER NULL DEFAULT NULL,
+  default_style INTEGER NULL DEFAULT NULL
 );
 
 -- ---
@@ -89,7 +89,7 @@ DROP TABLE IF EXISTS related;
 CREATE TABLE related (
   id SERIAL PRIMARY KEY,
   current_product_id INTEGER NULL DEFAULT NULL,
-  related_product_id INTEGER NULL DEFAULT NULL,
+  related_product_id INTEGER NULL DEFAULT NULL
 );
 
 -- ---
@@ -108,7 +108,7 @@ ALTER TABLE related ADD FOREIGN KEY (current_product_id) REFERENCES Product (id)
 -- --
 
 copy product(id,name,slogan,description,category,default_price)
-from /home/ubuntu/SDC/Products-API/data/product.csv
+from /home/ubuntu/Products-API/data/product.csv
 DELIMITER ,
 CSV HEADER;
 
