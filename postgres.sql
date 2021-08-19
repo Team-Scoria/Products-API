@@ -108,32 +108,32 @@ ALTER TABLE related ADD FOREIGN KEY (current_product_id) REFERENCES Product (id)
 -- --
 
 COPY product(id,name,slogan,description,category,default_price)
-FROM /Products-API/data/product.csv
+FROM "~/Products-API/data/product.csv"
 DELIMITER ,
 CSV HEADER;
 
 COPY related(id,current_product_id,related_product_id)
-FROM /Products-API/data/related.csv
+FROM "~/Products-API/data/related.csv"
 DELIMITER ,
 CSV HEADER;
 
 COPY features(id,product_id,feature,value)
-FROM /Products-API/data/features.csv
+FROM "~/Products-API/data/features.csv"
 DELIMITER ,
 CSV HEADER;
 
 COPY styles(id,productId,name,sale_price,original_price,default_style)
-FROM /Products-API/data/styles.csv
+FROM "~/Products-API/data/styles.csv"
 DELIMITER ,
 CSV HEADER;
 
 COPY skus(id,styleId,size,quantity)
-FROM /Products-API/data/skus.csv
+FROM "~/Products-API/data/skus.csv"
 DELIMITER ,
 CSV HEADER;
 
 COPY photos(id,styleId,url,thumbnail_url)
-FROM /Products-API/data/photos.csv
+FROM "~/Products-API/data/photos.csv"
 DELIMITER ,
 CSV HEADER;
 
