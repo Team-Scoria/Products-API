@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
-const { myPassword } = require('../password.js');
+// const { myPassword } = require('../password.js');
 
 const Pool = require('pg').Pool;
 const pool = new Pool({
-  user: 'postgres',
+  user: 'seijimatsumoto',
   host: 'ec2-3-92-187-204.compute-1.amazonaws.com',
   database: 'postgres',
-  // password: myPassword,
+  password: 'password',
   port: 5432,
 });
 
