@@ -138,7 +138,8 @@ DELIMITER ','
 CSV HEADER;
 
 CREATE INDEX product_id_index ON product (id);
+CREATE INDEX styles_id_index ON styles (productId);
 CREATE INDEX features_product_id_index ON features (product_id);
-CREATE INDEX photos_styleid_index ON photos (styleid);
-CREATE INDEX skus_styleid_index ON skus (styleid);
+CREATE INDEX photos_styleid_index ON photos (styleId);
+CREATE INDEX skus_styleid_index ON skus (styleId);
 CREATE INDEX current_product_id_index ON related (current_product_id);
