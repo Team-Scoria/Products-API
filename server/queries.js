@@ -3,12 +3,11 @@ const { myPassword } = require('../password.js');
 
 const Pool = require('pg').Pool;
 const pool = new Pool({
-  user: 'seijimatsumoto',
+  user: 'postgres',
   host: 'ec2-3-92-187-204.compute-1.amazonaws.com',
   database: 'postgres',
-  password: myPassword,
+  // password: myPassword,
   port: 5432,
-  idleTimeoutMillis: 60000
 });
 
 // GET /products
