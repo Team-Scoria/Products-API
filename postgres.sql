@@ -10,7 +10,14 @@
 --
 -- ---
 
-DROP TABLE IF EXISTS Product;
+DROP TABLE IF EXISTS Product CASCADE;
+DROP TABLE IF EXISTS Features CASCADE;
+DROP TABLE IF EXISTS Photos CASCADE;
+DROP TABLE IF EXISTS SKUs CASCADE;
+DROP TABLE IF EXISTS styles CASCADE;
+DROP TABLE IF EXISTS related CASCADE;
+
+
 
 CREATE TABLE Product (
   id SERIAL PRIMARY KEY,
@@ -26,7 +33,6 @@ CREATE TABLE Product (
 --
 -- ---
 
-DROP TABLE IF EXISTS Features;
 
 CREATE TABLE Features (
   id SERIAL PRIMARY KEY,
@@ -40,7 +46,6 @@ CREATE TABLE Features (
 --
 -- ---
 
-DROP TABLE IF EXISTS Photos;
 
 CREATE TABLE Photos (
   id SERIAL PRIMARY KEY,
@@ -54,7 +59,6 @@ CREATE TABLE Photos (
 --
 -- ---
 
-DROP TABLE IF EXISTS SKUs;
 
 CREATE TABLE SKUs (
   id SERIAL PRIMARY KEY,
@@ -68,13 +72,12 @@ CREATE TABLE SKUs (
 --
 -- ---
 
-DROP TABLE IF EXISTS styles;
 
 CREATE TABLE styles (
   id SERIAL PRIMARY KEY,
   productId INTEGER NULL DEFAULT NULL,
   name VARCHAR NULL DEFAULT NULL,
-  sale_price INTEGER NULL DEFAULT NULL,
+  sale_price VARCHAR NULL DEFAULT NULL,
   original_price INTEGER NULL DEFAULT NULL,
   default_style INTEGER NULL DEFAULT NULL
 );
@@ -84,7 +87,6 @@ CREATE TABLE styles (
 --
 -- ---
 
-DROP TABLE IF EXISTS related;
 
 CREATE TABLE related (
   id SERIAL PRIMARY KEY,
@@ -108,22 +110,22 @@ ALTER TABLE related ADD FOREIGN KEY (current_product_id) REFERENCES Product (id)
 -- --
 
 COPY product(id,name,slogan,description,category,default_price)
-FROM '/home/ubuntu/Products-API/data/product.csv'
+FROM '/Users/seijimatsumoto/Documents/Hack\ Reactor/RFE4/SDC/Products-API/data/product.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY related(id,current_product_id,related_product_id)
-FROM '/home/ubuntu/Products-API/data/related.csv'
+FROM '/Users/seijimatsumoto/Documents/Hack\ Reactor/RFE4/SDC/Products-API/data/related.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY features(id,product_id,feature,value)
-FROM '/home/ubuntu/Products-API/data/features.csv'
+FROM '/Users/seijimatsumoto/Documents/Hack\ Reactor/RFE4/SDC/Products-API/data/features.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY styles(id,productId,name,sale_price,original_price,default_style)
-FROM '/home/ubuntu/Products-API/data/styles.csv'
+FROM '/Users/seijimatsumoto/Documents/Hack\ Reactor/RFE4/SDC/Products-API/data/styles.csv'
 DELIMITER ','
 CSV HEADER;
 
