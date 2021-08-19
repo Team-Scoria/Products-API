@@ -137,6 +137,13 @@ FROM '/home/ubuntu/Products-API/data/photos.csv'
 DELIMITER ','
 CSV HEADER;
 
+DROP INDEX IF EXISTS product_id_index;
+DROP INDEX IF EXISTS styles_id_index;
+DROP INDEX IF EXISTS features_product_id_index;
+DROP INDEX IF EXISTS photos_styleid_index;
+DROP INDEX IF EXISTS skus_styleid_index;
+DROP INDEX IF EXISTS current_product_id_index;
+
 CREATE INDEX product_id_index ON product (id);
 CREATE INDEX styles_id_index ON styles (productId);
 CREATE INDEX features_product_id_index ON features (product_id);
